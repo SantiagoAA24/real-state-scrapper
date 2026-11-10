@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+# Derivado: se regenera con `python pipeline/build.py`
+web/data/inmuebles.json
+# Datos extraídos (teléfonos y textos de anuncios de terceros) y llave de la API
+data/snapshots/
+.env

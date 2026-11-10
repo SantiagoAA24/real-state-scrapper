@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radar inmobiliario · Bogotá</title>
+<link rel="stylesheet" href="vendor/maplibre-gl.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Radar inmobiliario <span>Bogotá</span></h1>
+  <div id="meta"></div>
+</header>
+
+<aside id="filtros">
+  <section>
+    <h2>Filtros</h2>
+    <div class="fila chips" id="f-tipo">
+      <label><input type="checkbox" value="0" checked> Apartamentos</label>
+      <label><input type="checkbox" value="1" checked> Casas</label>
+    </div>
+    <label class="campo">Precio (millones)
+      <span class="rango"><input type="number" id="f-pmin" placeholder="mín" min="0" step="10"> – <input type="number" id="f-pmax" placeholder="máx" min="0" step="10"></span></label>
+    <label class="campo">Área (m²)
+      <span class="rango"><input type="number" id="f-amin" placeholder="mín" min="0"> – <input type="number" id="f-amax" placeholder="máx" min="0"></span></label>
+    <label class="campo">Habitaciones (mín.)
+      <select id="f-cmin"><option value="0">Cualquiera</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+    <div class="campo">Estrato
+      <div class="fila chips" id="f-estrato"></div></div>
+    <label class="campo">Rentabilidad mínima <output id="o-ymin"></output>
+      <input type="range" id="f-ymin" min="0" max="15" step="0.5" value="0"></label>
+    <label class="campo">Precio vs. zona (máx.) <output id="o-dz"></output>
+      <input type="range" id="f-dz" min="-40" max="40" step="5" value="40"></label>
+    <label class="check"><input type="checkbox" id="f-conf" checked> Ocultar estimaciones de baja confianza</label>
+    <label class="check"><input type="checkbox" id="f-nuevo" checked> Ocultar proyectos sobre planos</label>
+    <label class="check"><input type="checkbox" id="f-fav"> Solo favoritos</label>
+  </section>
+
+  <section>
+    <h2>Supuestos</h2>
+    <div class="fila seg" id="s-modo">
+      <button data-v="bruta">Bruta</button><button data-v="neta">Neta</button>
+    </div>
+    <div id="s-neta">
+      <label class="campo">Vacancia (meses/año) <input type="number" id="s-vac" min="0" max="6" step="0.5"></label>
+      <label class="campo">Predial (% del precio/año) <input type="number" id="s-pred" min="0" max="2" step="0.1"></label>
+      <label class="campo">Otros gastos (% del arriendo) <input type="number" id="s-otros" min="0" max="30" step="1"></label>
+      <label class="check"><input type="checkbox" id="s-admin"> El propietario paga la administración</label>
+    </div>
+    <label class="campo">Descuento negociado (% del precio) <input type="number" id="s-desc" min="0" max="30" step="1"></label>
+    <label class="check"><input type="checkbox" id="s-unid"> Casas arrendadas por unidades</label>
+    <label class="campo" id="s-efic-w">Área arrendable de la casa (%) <input type="number" id="s-efic" min="30" max="100" step="5"></label>
+    <label class="campo">Tasa de referencia, p. ej. CDT (% E.A.) <input type="number" id="s-cdt" min="0" max="20" step="0.1"></label>
+  </section>
+
+  <section>
+    <h2>Color</h2>
+    <label class="campo">Colorear por
+      <select id="c-metrica">
+        <option value="y">Rentabilidad</option>
+        <option value="dz">Precio/m² vs. zona</option>
+        <option value="m2">Precio por m²</option>
+      </select></label>
+    <div class="fila seg" id="c-escala">
+      <button data-v="abs">Escala fija</button><button data-v="rel">Relativa</button>
+    </div>
+    <div id="leyenda"></div>
+    <label class="check"><input type="checkbox" id="c-puntos" checked> Inmuebles</label>
+    <label class="check"><input type="checkbox" id="c-hex"> Malla hexagonal (mediana)</label>
+    <label class="check"><input type="checkbox" id="c-loc"> Localidades (mediana)</label>
+    <label class="check"><input type="checkbox" id="c-arr"> Arriendos publicados</label>
+  </section>
+</aside>
+
+<main>
+  <div id="mapa"></div>
+  <div id="herramientas">
+    <button data-t="mover" title="Mover el mapa">Mover</button>
+    <button data-t="lazo" title="Dibuja a mano alzada alrededor de una zona">Lazo</button>
+    <button data-t="radio" title="Clic en el centro y arrastra">Radio</button>
+    <button data-t="loc" title="Clic sobre una o varias localidades">Localidad</button>
+    <button id="h-limpiar" title="Quitar la selección">Limpiar</button>
+    <button id="h-guardar" title="Guardar esta zona">Guardar zona</button>
+    <select id="h-zonas" title="Zonas guardadas"><option value="">Zonas guardadas…</option></select>
+  </div>
+  <div id="pista"></div>
+</main>
+
+<aside id="panel">
+  <div id="resumen"></div>
+  <div id="detalle" hidden></div>
+</aside>
+
+<script src="vendor/maplibre-gl.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
